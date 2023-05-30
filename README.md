@@ -1,4 +1,4 @@
-# NO.VUE
+# No.Vue
 
 基于 `Vite` 搭建的 `Vue 3` `TypeScript` 框架
 
