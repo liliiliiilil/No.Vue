@@ -10,7 +10,7 @@ export default {
   actions: [
     {
       type: "add",
-      path: "src/components/{{pascalCase name}}/index.vue",
+      path: "src/components/No{{pascalCase name}}/index.vue",
       templateFile: "plop-templates/component/index.hbs",
     },
   ],

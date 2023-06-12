@@ -1,140 +1,190 @@
 <template>
   <div class="login-wrap">
-    <div class="login" @click="handleClick()">{{ $t(store.text) }}</div>
-    <div
-      class="item"
-      v-for="(
-        { size, left, bottom, background, opacity, zIndex, y }, index
-      ) in items"
-      :key="index"
-      :style="{
-        position: 'absolute',
-        width: `${size}px`,
-        height: `${size}px`,
-        left: `${left}px`,
-        bottom: `${bottom}px`,
-        'background-color': background,
-        'z-index': zIndex,
-        'box-shadow': `0px 0px 20px ${background}`,
-        opacity: opacity,
-        transform: `translate(0, ${y}%)`,
-      }"
-    ></div>
+    <div class="left item"></div>
+    <div class="right item">
+      <div class="special-wrap">
+        <no-special></no-special>
+      </div>
+      <h1 class="title">
+        <span>No.Vue</span>
+        <br />
+        <span style="margin-left: 200px">- XINNIGS</span>
+      </h1>
+
+      <el-form
+        class="form-block"
+        label-position="top"
+        label-width="100px"
+        :model="form"
+        style="max-width: 460px"
+      >
+        <el-form-item>
+          <el-radio-group v-model="form.type">
+            <el-radio-button label="Account">{{
+              $t("login.Account")
+            }}</el-radio-button>
+            <el-radio-button label="Email">{{
+              $t("login.Email")
+            }}</el-radio-button>
+            <el-radio-button label="Phone">{{
+              $t("login.Phone")
+            }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <template v-if="form.type === 'Account'">
+          <el-form-item :label="$t('login.Account')">
+            <el-input
+              v-model="form.account"
+              :placeholder="
+                $t('global.pleaseInput', { name: $t('login.Account') })
+              "
+            />
+          </el-form-item>
+          <el-form-item :label="$t('login.Password')">
+            <el-input
+              type="password"
+              show-password
+              v-model="form.password"
+              :placeholder="
+                $t('global.pleaseInput', { name: $t('login.Password') })
+              "
+            />
+            <el-text style="margin-left: auto">
+              {{ $t("login.ForgotPassword") }}</el-text
+            >
+          </el-form-item>
+        </template>
+        <template v-if="form.type === 'Email'">
+          <el-form-item :label="$t('login.Email')">
+            <el-input
+              v-model="form.email"
+              :placeholder="
+                $t('global.pleaseInput', { name: $t('login.Email') })
+              "
+            />
+          </el-form-item>
+          <el-form-item :label="$t('login.Captcha')">
+            <el-input
+              v-model="form.captcha"
+              :placeholder="
+                $t('global.pleaseInput', { name: $t('login.Captcha') })
+              "
+            >
+              <template #append>
+                <el-button type="primary">{{ $t("login.Send") }}</el-button>
+              </template>
+            </el-input>
+            <el-text style="margin-left: auto">&nbsp;</el-text>
+          </el-form-item>
+        </template>
+        <template v-if="form.type === 'Phone'">
+          <el-form-item :label="$t('login.Phone')">
+            <el-input
+              v-model="form.phone"
+              :placeholder="
+                $t('global.pleaseInput', { name: $t('login.Phone') })
+              "
+            />
+          </el-form-item>
+          <el-form-item :label="$t('login.Captcha')">
+            <el-input
+              v-model="form.captcha"
+              :placeholder="
+                $t('global.pleaseInput', { name: $t('login.Captcha') })
+              "
+            >
+              <template #append>
+                <el-button type="primary">{{ $t("login.Send") }}</el-button>
+              </template>
+            </el-input>
+            <el-text style="margin-left: auto">&nbsp;</el-text>
+          </el-form-item>
+        </template>
+        <el-form-item class="operate-button">
+          <el-button type="primary" @click="onLogin"
+            >{{ $t("login.Login") }}
+          </el-button>
+          <el-button type="primary" plain>
+            {{ $t("login.Register") }}
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
-const locale = useLocale();
-const topic = useTopic();
-const store = useLoginStore();
-
-const handleClick = () => {
-  locale.value = locale.value === "zh_CN" ? "en_US" : "zh_CN";
-  topic.value = topic.value === "night" ? "sunny" : "night";
-};
-
-const items = ref();
-const timer = ref();
-const animation = (interval = 100, skip = 50) => {
-  if (timer.value) {
-    clearInterval(timer.value);
-  }
-  window.requestAnimationFrame(() => {
-    timer.value = setInterval(() => {
-      const innerHeight = window.innerHeight;
-      items.value = items.value.map(
-        (el: { y: number; size: number; bottom: number; opacity: number }) => {
-          el.y += skip;
-          const h = (el.y / 100) * el.size;
-          if (el.y > 0) {
-            el.opacity = 1;
-          }
-          if (h - el.bottom > el.size * 6) {
-            el.y = -300;
-            el.bottom = innerHeight * 2;
-            el.opacity = 0;
-          }
-          return el;
-        }
-      );
-    }, interval);
-  });
-};
-
-const randomRgba = () => {
-  const r = Math.floor(Math.random() * 255);
-  const g = Math.floor(Math.random() * 255);
-  const b = Math.floor(Math.random() * 255);
-  return `rgba(${r},${g},${b},0.8)`;
-};
-const randomInteger = (max: number, min = 0) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-onMounted(() => {
-  const innerWidth = window.innerWidth;
-  const innerHeight = window.innerHeight * 2;
-  items.value = Array(300)
-    .fill(1)
-    .map(() => {
-      const size = randomInteger(60, 10);
-      const left = randomInteger(innerWidth, 0);
-      const bottom = randomInteger(innerHeight, 10);
-      return {
-        size,
-        left,
-        bottom,
-        background: randomRgba(),
-        zIndex: randomInteger(9, 1),
-        opacity: 1,
-        y: 0,
-      };
-    });
-
-  animation();
+const form = reactive({
+  account: "admin",
+  password: "admin2023",
+  email: "xinnigs@gmail.com",
+  phone: "",
+  captcha: "",
+  type: "Account",
 });
+const router = useRouter();
+const onLogin = () => {
+  router.replace("/helloworld");
+};
+onMounted(() => {});
 </script>
 <style lang="scss" scoped>
 .login-wrap {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background-color: var(--bg-color);
+  border: 6px solid var(--el-color-primary);
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--el-color-primary) 40%,
+    var(--no-fill-color) 40%
+  );
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
   .item {
-    transition: transform 0.2s;
-  }
-  .login {
-    user-select: none;
-    box-shadow: 0px 0px 60px red;
-    padding: 0 16px;
-    z-index: 5;
-    font-size: 96px;
-    text-transform: uppercase;
-    background: linear-gradient(
-      219deg,
-      var(--color-1) 19%,
-      transparent 19%,
-      transparent 20%,
-      var(--color-5) 20%,
-      var(--color-5) 39%,
-      transparent 39%,
-      transparent 40%,
-      var(--color-4) 40%,
-      var(--color-4) 59%,
-      transparent 59%,
-      transparent 60%,
-      var(--color-3) 60%,
-      var(--color-3) 79%,
-      transparent 79%,
-      transparent 80%,
-      var(--color-2) 80%
-    );
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    cursor: pointer;
+    height: 100%;
+    &.left {
+      width: 40%;
+      background: url("../images/login.png");
+      background-size: 100% 60%;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
+    &.right {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      .special-wrap {
+        position: absolute;
+        top: 10px;
+        right: 24px;
+      }
+      .title {
+        margin-bottom: 24px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        font-weight: bolder;
+        padding: 0 12px;
+        color: var(--el-color-primary);
+        user-select: none;
+        &:hover {
+          border-bottom: 2px solid var(--el-color-primary);
+        }
+      }
+      .form-block {
+        width: 60%;
+        margin-bottom: 24px;
+        .operate-button {
+          .el-button {
+            width: 100%;
+          }
+          .el-button + .el-button {
+            margin-left: 0px;
+            margin-top: 12px;
+          }
+        }
+      }
+    }
   }
 }
 </style>

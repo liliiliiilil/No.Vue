@@ -1,3 +1,3 @@
 export default {
-  code: "你好",
+  code: "system",
 };

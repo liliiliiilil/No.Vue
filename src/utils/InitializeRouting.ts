@@ -9,9 +9,9 @@ export const init = (router: Router) => {
   /**
    * @开发环境不进行鉴权
    */
-  //   if (import.meta.env.MODE === "development") {
-  //     return handle.get("development")!(router, []);
-  //   }
+  if (import.meta.env.MODE === "development") {
+    return handle.get("development")!(router, []);
+  }
   /**
    * @初始化白名单
    */
@@ -243,7 +243,7 @@ const handle = new Map([
     "development",
     (router: Router) => {
       // 菜单 依赖初始化模块的 label
-      const menu: Array<{ label: string; path: string }> = [];
+      const menu: any[] = [];
       // 权限 默认拥有 use 权限, 还有如 view edit export
       const authority = new Map();
       // 读取文件
@@ -251,16 +251,13 @@ const handle = new Map([
         eager: true,
         import: "default",
       }) as {
-        [key: string]: Array<RouteRecordRaw & { label: string }>;
+        [key: string]: Array<RouteRecordRaw>;
       };
       // 解析文件
       Object.entries(modules).forEach(([url, routes]) => {
         routes.forEach((route) => {
-          if (route.label) {
-            menu.push({
-              label: route.label,
-              path: route.path,
-            });
+          if (route.meta) {
+            menu.push(route);
 
             authority.set(
               url.replace(/modules|route|\.ts|\.?\/?/g, ""), // 以文件名称为模块code
@@ -270,9 +267,13 @@ const handle = new Map([
           router.addRoute(route);
         });
       });
+
       // 进行数据持久化
       const store = useGlobalStore();
       store.setAuthority(authority);
+
+      store.menu = menu;
+      // store.setMenu(menu);
       return Promise.resolve();
     },
   ],

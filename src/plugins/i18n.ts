@@ -52,7 +52,7 @@ watch(target, (k) => {
           });
           break;
       }
-      loadLazy(files, k);
+      loadLazy(files, k, {});
     } else {
       // @ts-ignore 🤮
       i18n.global.locale.value = k;
@@ -64,30 +64,42 @@ watch(target, (k) => {
 
 export const useLocale = (): typeof target => target;
 
-const loadLazy = (files: any, k: string) => {
-  Object.keys(files).forEach((url) => {
-    const rs = files[url];
-    const [module, locale] = url
-      .replace(/src|modules|\.ts|\.?\/?/g, "")
-      .split("locale");
-    rs().then((translate: any) => {
-      if (module && locale) {
-        if (!messages[locale]) {
-          messages[locale] = {};
+const loadLazy = (files: any, locale: string, translate: any) => {
+  // if (!messages[locale]) {
+  //   messages[locale] = {};
+  // }
+  // let trans = messages[locale] || {};
+  const modules: string[] = [];
+  Promise.all(
+    Object.keys(files).map((url) => {
+      const [module] = url
+        .replace(/src|modules|\.ts|\.?\/?/g, "")
+        .split("locale");
+
+      modules.push(module);
+
+      return files[url]();
+    })
+  )
+    .then((files) => {
+      files.forEach((trans, index) => {
+        const module = modules[index];
+        if (module) {
+          translate = Object.assign(translate, {
+            [module]: trans,
+          });
         }
-        messages[locale][module] = translate as {
-          [key: string]: object;
-        };
+      });
+    })
+    .then(() => {
+      // 加载语言
+      i18n.global.setLocaleMessage(locale, translate);
 
-        // 加载语言
-        i18n.global.setLocaleMessage(k, messages);
+      alreadyLoadedLocale.add(locale);
 
-        // @ts-ignore 🤮
-        i18n.global.locale.value = k;
-        alreadyLoadedLocale.add(k);
-      }
+      // @ts-ignore 🤮
+      i18n.global.locale.value = locale;
     });
-  });
 };
 
 export default i18n;

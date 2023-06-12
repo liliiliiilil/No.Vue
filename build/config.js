@@ -4,10 +4,9 @@ import vueI18n from "@intlify/vite-plugin-vue-i18n";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import postcsspxtoviewport8plugin from "postcss-px-to-viewport-8-plugin";
-// import {
-//   ElementPlusResolver,
-//   VantResolver,
-// } from "unplugin-vue-components/resolvers";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import Icons from "unplugin-icons/vite";
+import IconsResolver from "unplugin-icons/resolver";
 
 export default (env) => {
   return {
@@ -34,7 +33,7 @@ export default (env) => {
     },
     Csspxtoviewport: postcsspxtoviewport8plugin({
       unitToConvert: "px",
-      viewportWidth: 750,
+      viewportWidth: 1366,
       selectorBlackList: ["ignore-"],
       exclude: [/node_modules/],
     }),
@@ -47,10 +46,15 @@ export default (env) => {
       include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       imports: ["vue", "vue-router"],
       dirs: ["./src/plugins", "./src/modules/*/store.ts"],
-      dts: "./.plugins.d.ts",
       resolvers: [
-        // ElementPlusResolver(), VantResolver()
+        ElementPlusResolver(),
+        IconsResolver({
+          alias: { icon: "ep" },
+          prefix: "",
+          enabledCollections: ["ep"],
+        }),
       ],
+      dts: "./.plugins.d.ts",
       eslintrc: {
         enabled: true,
         filepath: "./.plugins.json",
@@ -58,11 +62,19 @@ export default (env) => {
       },
     }),
     Components: Components({
-      dts: "./.components.d.ts",
       dirs: ["src/components"],
       resolvers: [
-        // ElementPlusResolver(), VantResolver()
+        IconsResolver({
+          alias: { icon: "ep" },
+          prefix: "",
+          enabledCollections: ["ep"],
+        }),
+        ElementPlusResolver(),
       ],
+      dts: "./.components.d.ts",
+    }),
+    Icons: Icons({
+      autoInstall: true,
     }),
   };
 };

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-export const useHelloworldStore = defineStore("helloworld", {
+export const useSystemSettingsStore = defineStore("system-settings", {
   state: () => {
     return {};
   },

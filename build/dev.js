@@ -9,11 +9,12 @@ export default ({ env }) => {
     VueI18n,
     AutoImport,
     Components,
+    Icons,
   } = merge({ env });
   return {
     server,
     resolve,
-    plugins: [VUE, VueI18n, AutoImport, Components],
+    plugins: [VUE, VueI18n, AutoImport, Components, Icons],
     css: {
       postcss: {
         plugins: [Csspxtoviewport],

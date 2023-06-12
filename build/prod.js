@@ -11,6 +11,7 @@ export default ({ mode }) => {
     VueI18n,
     AutoImport,
     Components,
+    Icons,
   } = merge({ mode });
   return {
     base: "./",
@@ -47,6 +48,7 @@ export default ({ mode }) => {
       Components,
       gzip(),
       visualizer({ open: false }),
+      Icons,
     ],
     css: {
       postcss: {
