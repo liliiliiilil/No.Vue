@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    copy: typeof import('./src/components/NoIconSelector copy/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
@@ -76,6 +77,7 @@ declare module '@vue/runtime-core' {
     IconUnlock: typeof import('~icons/ep/unlock')['default']
     IconUser: typeof import('~icons/ep/user')['default']
     IconUserFilled: typeof import('~icons/ep/user-filled')['default']
+    IconWarning: typeof import('~icons/ep/warning')['default']
     IElExpand: typeof import('~icons/ep/expand')['default']
     IEpExpand: typeof import('~icons/ep/expand')['default']
     M: typeof import('./src/components/NoAside/M.vue')['default']
@@ -84,6 +86,7 @@ declare module '@vue/runtime-core' {
     NoBreadcrumb: typeof import('./src/components/NoBreadcrumb/index.vue')['default']
     NoHeader: typeof import('./src/components/NoHeader/index.vue')['default']
     NoIconSelector: typeof import('./src/components/NoIconSelector/index.vue')['default']
+    NoMenuSelector: typeof import('./src/components/NoMenuSelector/index.vue')['default']
     NoNavigation: typeof import('./src/components/NoNavigation/index.vue')['default']
     NoSpecial: typeof import('./src/components/NoSpecial/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

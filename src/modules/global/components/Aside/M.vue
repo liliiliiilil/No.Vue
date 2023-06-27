@@ -6,9 +6,9 @@
     >
       <template #title>
         <el-icon>
-          <span :class="`iconfont icon-${item.meta.icon}`"></span>
+          <span :class="`iconfont icon-${item.icon}`"></span>
         </el-icon>
-        <span>{{ item.meta.label }}</span>
+        <span>{{ item.label }}</span>
       </template>
       <M :list="item.children" />
     </el-sub-menu>
@@ -17,12 +17,13 @@
       v-else
       :index="item.path"
       :class="route.path === item.path ? 'no-active' : ''"
+      @click="onClick(item)"
     >
       <el-icon>
-        <span :class="`iconfont icon-${item.meta.icon}`"></span>
+        <span :class="`iconfont icon-${item.icon}`"></span>
       </el-icon>
       <template #title>
-        <span>{{ item.meta.label }}</span>
+        <span>{{ item.label }}</span>
       </template>
     </el-menu-item>
   </template>
@@ -36,6 +37,10 @@ const props = defineProps({
   },
 });
 const route = useRoute();
+const router = useRouter();
+const onClick = (item: any) => {
+  router.push(item.path);
+};
 </script>
 <style lang="scss">
 .no-active {

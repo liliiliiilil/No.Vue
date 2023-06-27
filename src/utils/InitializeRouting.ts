@@ -251,14 +251,13 @@ const handle = new Map([
         eager: true,
         import: "default",
       }) as {
-        [key: string]: Array<RouteRecordRaw>;
+        [key: string]: Array<RouteRecordRaw & { code: string }>;
       };
       // 解析文件
       Object.entries(modules).forEach(([url, routes]) => {
         routes.forEach((route) => {
-          if (route.meta) {
+          if (route.code) {
             menu.push(route);
-
             authority.set(
               url.replace(/modules|route|\.ts|\.?\/?/g, ""), // 以文件名称为模块code
               new Set(["use"])
@@ -267,13 +266,11 @@ const handle = new Map([
           router.addRoute(route);
         });
       });
-
       // 进行数据持久化
       const store = useGlobalStore();
       store.setAuthority(authority);
 
       store.menu = menu;
-      // store.setMenu(menu);
       return Promise.resolve();
     },
   ],

@@ -1,6 +1,6 @@
 <template>
   <el-aside :width="collapse ? '64px' : '200px'" class="no-component no-aside">
-    <el-menu router :collapse="collapse" style="height: 100%">
+    <el-menu :collapse="collapse" style="height: 100%">
       <M :list="store.menu" />
     </el-menu>
     <el-icon

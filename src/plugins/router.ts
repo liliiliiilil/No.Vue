@@ -35,33 +35,14 @@ const inspection = (to: RouteLocationNormalized, next: NavigationGuardNext) => {
            */
           if (import.meta.env.MODE === "development") {
             sessionStorage.setItem("code", "development");
-            initcollector(to);
             return next();
           }
-          clearcollector();
           return next("/login");
         }
-        initcollector(to);
         next();
       }
       break;
   }
-};
-
-/** @收集节点 */
-const initcollector = (route: any) => {
-  const store = useGlobalStore();
-  const code = route.meta.code;
-  if (code) {
-    store.bookmark.set("active", code);
-    store.bookmark.set(code, route);
-  }
-};
-
-/** @清空节点 */
-const clearcollector = () => {
-  const store = useGlobalStore();
-  store.bookmark = new Map([["active", ""]]);
 };
 
 router.beforeEach((to, from, next) => {

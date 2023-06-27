@@ -17,7 +17,7 @@ export default ({ env }) => {
     plugins: [VUE, VueI18n, AutoImport, Components, Icons],
     css: {
       postcss: {
-        plugins: [Csspxtoviewport],
+        // plugins: [Csspxtoviewport],
       },
     },
   };

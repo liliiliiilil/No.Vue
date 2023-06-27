@@ -18,12 +18,14 @@
     <!-- 内容布局 -->
     <template v-else>
       <el-container style="width: 100%; height: 100%">
-        <el-header height="40px" style="padding: 0"> <no-header /></el-header>
-        <el-container style="width: 100%; height: 100%">
-          <no-aside></no-aside>
+        <el-header height="40px" style="padding: 0">
+          <Header />
+        </el-header>
+        <el-container style="width: 100%; height: 100%; overflow: hidden">
+          <Aside />
           <el-container style="width: 100%; height: 100%">
             <el-header height="50px">
-              <no-navigation></no-navigation>
+              <!-- <no-navigation></no-navigation> -->
             </el-header>
             <el-main style="padding: 12px; padding-top: 0">
               <router-view v-slot="{ Component, route }">
@@ -48,6 +50,8 @@
   </div>
 </template>
 <script lang="ts" setup>
+import Header from "../components/Header.vue";
+import Aside from "../components/Aside/index.vue";
 const topic = useTopic();
 const route = useRoute();
 const single = computed(() =>
@@ -65,8 +69,6 @@ const single = computed(() =>
     width: 100%;
     height: 100%;
     overflow: hidden;
-    // color: #000;
-    // background-color: #fff;
   }
   &.sunny {
     background-color: #fff;

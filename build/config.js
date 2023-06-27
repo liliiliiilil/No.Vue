@@ -33,7 +33,7 @@ export default (env) => {
     },
     Csspxtoviewport: postcsspxtoviewport8plugin({
       unitToConvert: "px",
-      viewportWidth: 1366,
+      viewportWidth: 1920,
       selectorBlackList: ["ignore-"],
       exclude: [/node_modules/],
     }),
@@ -45,7 +45,7 @@ export default (env) => {
     AutoImport: AutoImport({
       include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/, /\.md$/],
       imports: ["vue", "vue-router"],
-      dirs: ["./src/plugins", "./src/modules/*/store.ts"],
+      dirs: ["./src/plugins", "./src/modules/**/store.ts"],
       resolvers: [
         ElementPlusResolver(),
         IconsResolver({

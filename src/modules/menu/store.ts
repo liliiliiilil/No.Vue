@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-export const useSystemSettingsStore = defineStore("system-settings", {
+export const useMenuStore = defineStore("menu", {
   state: () => {
     return {};
   },

@@ -1,12 +1,6 @@
 <template>
-  <div class="permissions-wrap">
+  <div class="m-module-wrap">
     <div class="tools-wrap">
-      <el-tooltip content="解锁后的数据不会更新" placement="top">
-        <el-button type="primary" link @click="lock && (lock = false)">
-          <el-icon v-if="lock"><Icon-Lock /></el-icon>
-          <el-icon v-if="!lock"><Icon-Unlock /></el-icon>
-        </el-button>
-      </el-tooltip>
       <el-button
         link
         type="primary"
@@ -55,7 +49,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="path" label="路由" width="200">
+      <el-table-column prop="path" label="路由">
         <template #default="scope">
           <template v-if="scope.row.new">
             <el-input :disabled="lock" v-model="scope.row.path"></el-input>
@@ -66,7 +60,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="url" label="组件" width="220">
+      <el-table-column prop="url" label="组件">
         <template #default="scope">
           <template v-if="scope.row.new">
             <el-input :disabled="lock" v-model="scope.row.url"></el-input>
@@ -77,22 +71,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="permission" label="页面按钮" width="90">
-        <template #default="scope">
-          <el-checkbox-group
-            v-model="scope.row.permission"
-            :disabled="!scope.row.new"
-            :min="1"
-          >
-            <el-checkbox label="use">操作</el-checkbox>
-            <!-- <el-checkbox label="view">查看</el-checkbox> -->
-            <!-- <el-checkbox label="edit">编辑</el-checkbox> -->
-            <!-- <el-checkbox label="export">导出</el-checkbox> -->
-          </el-checkbox-group>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="permission" label="关联权限" width="90">
+      <el-table-column prop="permission" label="关联权限" width="200">
         <template #default="scope">
           <el-checkbox-group
             v-if="scope.row.superior"
@@ -167,7 +146,7 @@
 </template>
 <script lang="ts" setup>
 // 锁
-const lock = ref(true);
+const lock = ref(false);
 
 const editing = ref(false);
 const modules: Ref<any[]> = ref([
@@ -275,7 +254,7 @@ const depDelete = (arr: any[], row: any, superior: string) => {
 </script>
 
 <style lang="scss" scoped>
-.permissions-wrap {
+.m-module-wrap {
   display: flex;
   flex-direction: column;
   width: 100%;
